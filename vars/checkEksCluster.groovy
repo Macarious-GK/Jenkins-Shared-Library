@@ -4,10 +4,7 @@ def call(String credentialsId, String clusterName, String reginCode) {
         sh """
             aws eks update-kubeconfig --name ${clusterName} --region ${reginCode}
             kubectl get svc
-            kubectl apply -f namespace.yaml
-
-            echo "Applying pv.yaml..."
-            kubectl apply -f pv.yaml
+            
             """
     }
 }
