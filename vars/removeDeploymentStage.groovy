@@ -1,4 +1,4 @@
-def call(String credentialsId){
+def call(String credentialsId, String clusterName, String reginCode){
     withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY', credentialsId: credentialsId)]) {
 
     sh'''
