@@ -6,7 +6,7 @@ def call(String credentialsId, String clusterName, String regionCode) {
         """
         
         // Check if the deployment already exists
-        def deploymentExists = sh(script: "kubectl get deployments -n macarious | grep deployment-name || true", returnStatus: true) == 0
+        def deploymentExists = sh(script: "kubectl get deployments -n macarious | grep my-deployment || true", returnStatus: true) == 0
 
         if (deploymentExists) {
             error "Deployment already exists. Skipping deployment."
