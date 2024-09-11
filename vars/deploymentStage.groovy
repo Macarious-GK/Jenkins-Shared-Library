@@ -1,7 +1,9 @@
-def call(String credentialsId,){
+def call(String credentialsId){
     withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY', credentialsId: credentialsId)]) {
 
     sh'''
+        aws eks update-kubeconfig --name ${clusterName} --region ${reginCode}
+
         echo "Applying namespace.yaml..."
         kubectl apply -f namespace.yaml
 
@@ -22,6 +24,8 @@ def call(String credentialsId,){
 
         echo "Applying deployment.yaml..."
         kubectl apply -f deployment.yaml
+        
+        kubectl get svc -n macarious
     '''
     }
 }
