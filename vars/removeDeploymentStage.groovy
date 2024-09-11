@@ -4,28 +4,32 @@ def call(String credentialsId){
     sh'''
         aws eks update-kubeconfig --name ${clusterName} --region ${reginCode}
 
-        echo "Applying namespace.yaml..."
-        kubectl apply -f namespace.yaml
-
-        echo "Applying pv.yaml..."
-        kubectl apply -f pv.yaml
-
-        echo "Applying pvc.yaml..."
-        kubectl apply -f pvc.yaml
-
-        echo "Applying job.yaml..."
-        kubectl apply -f job.yaml
-
-        echo "Applying service.yaml..."
-        kubectl apply -f service.yaml
-
-        echo "Applying ingress.yaml..."
-        kubectl apply -f ingress.yaml
-
-        echo "Applying deployment.yaml..."
-        kubectl apply -f deployment.yaml
+        namespace="macarious"
+        kubectl get svc -n $namespace 
         
-        kubectl get svc -n macarious
+        echo "Deleting deployment.yaml..."
+        kubectl delete -f deployment.yaml -n $namespace
+
+        echo "Deleting ingress.yaml..."
+        kubectl delete -f ingress.yaml -n $namespace
+
+        echo "Deleting service.yaml..."
+        kubectl delete -f service.yaml -n $namespace
+
+        echo "Deleting job.yaml..."
+        kubectl delete -f job.yaml -n $namespace
+
+        echo "Deleting pvc.yaml..."
+        kubectl delete -f pvc.yaml -n $namespace
+
+        echo "Deleting pv.yaml..."
+        kubectl delete -f pv.yaml -n $namespace
+
+        echo "Deleting namespace.yaml..."
+        kubectl delete -f namespace.yaml -n $namespace
+
+        echo "Listing remaining services in namespace $namespace..."
+        kubectl get svc -n $namespace
     '''
     }
 }
