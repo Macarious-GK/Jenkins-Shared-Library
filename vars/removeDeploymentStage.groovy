@@ -1,7 +1,7 @@
 def call(String credentialsId, String clusterName, String reginCode){
     withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY', credentialsId: credentialsId)]) {
 
-    sh'''
+    sh"""
         aws eks update-kubeconfig --name ${clusterName} --region ${reginCode}
 
         namespace="macarious"
@@ -30,6 +30,6 @@ def call(String credentialsId, String clusterName, String reginCode){
 
         echo "Listing remaining services in namespace $namespace..."
         kubectl get svc -n $namespace
-    '''
+    """
     }
 }
