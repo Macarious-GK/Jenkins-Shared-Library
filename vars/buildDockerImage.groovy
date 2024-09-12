@@ -4,10 +4,10 @@ def call(String imageName) {
     }
     // Build the Docker image
     echo "Building Docker image..."
-    sh 'docker build -t macarious25siv/books:V4 .'
+    sh "docker build -t ${imageName} ."
 
     // Check the result of the build and handle errors
-    def result = sh(script: 'docker images | grep macarious25siv/books', returnStatus: true)
+    def result = sh(script: "docker images | grep ${imageName}", returnStatus: true)
     if (result == 0) {
         echo "Docker image built successfully."
     } else {
