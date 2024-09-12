@@ -1,18 +1,22 @@
 def call(String imageName) {
     if (!imageName) {
-        error "Image name must be provided"
+        error "Image name must be provided."
     }
+
     // Build the Docker image
-    echo "Building Docker image..."
-    sh "docker build -t ${imageName} ."
+    echo "Building Docker image: ${imageName}..."
+    def buildResult = sh(script: "docker build -t ${imageName} .", returnStatus: true)
 
-    // Check the result of the build and handle errors
-    def result = sh(script: "docker images | grep ${imageName}", returnStatus: true)
-    if (result == 0) {
-        echo "Docker image built successfully."
-    } else {
-        error("Docker image build failed.")
+    // Check if the build was successful
+    if (buildResult != 0) {
+        error "Docker image build failed."
     }
 
+    // Verify the image was created
+    def imageExists = sh(script: "docker images -q ${imageName}", returnStatus: true) == 0
+    if (!imageExists) {
+        error "Docker image '${imageName}' not found after build."
+    }
 
+    echo "Docker image '${imageName}' built and verified successfully."
 }
