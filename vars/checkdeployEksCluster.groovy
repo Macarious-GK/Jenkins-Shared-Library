@@ -1,37 +1,29 @@
-def call(String credentialsId, String clusterName, String regionCode) {
+def call(String credentialsId, String clusterName, String reginCode) {
     withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY', credentialsId: credentialsId)]) {
         // Check if the EKS cluster exists
         sh """
-            aws eks update-kubeconfig --name ${clusterName} --region ${regionCode}
-        """
+            aws eks update-kubeconfig --name ${clusterName} --region ${reginCode}
+            kubectl get svc
+            echo "Applying namespace.yaml..."
+            kubectl apply -f namespace.yaml
 
-        // Check if the deployment already exists
-        def deploymentExists = sh(script: "kubectl get deployments -n macarious | grep deployment-name || true", returnStatus: true) == 0
+            echo "Applying pv.yaml..."
+            kubectl apply -f pv.yaml
 
-        if (deploymentExists) {
-            error "Deployment already exists. Skipping deployment."
-        } else {
-            echo "Deployment does not exist. Applying configuration files..."
+            echo "Applying pvc.yaml..."
+            kubectl apply -f pvc.yaml
 
-            sh """
-                echo "Applying namespace.yaml..."
-                kubectl apply -f namespace.yaml
-                echo "Applying pv.yaml..."
-                kubectl apply -f pv.yaml
-                echo "Applying pvc.yaml..."
-                kubectl apply -f pvc.yaml
-                echo "Applying job.yaml..."
-                kubectl apply -f job.yaml
-                echo "Applying service.yaml..."
-                kubectl apply -f service.yaml
-                echo "Applying ingress.yaml..."
-                kubectl apply -f ingress.yaml
-                echo "Applying deployment.yaml..."
-                kubectl apply -f deployment.yaml
-            """
-        }
+            echo "Applying job.yaml..."
+            kubectl apply -f job.yaml
 
-        // Display the services in the namespace
-        sh "kubectl get svc -n macarious"
-    }
-}
+            echo "Applying service.yaml..."
+            kubectl apply -f service.yaml
+
+            echo "Applying ingress.yaml..."
+            kubectl apply -f ingress.yaml
+            
+            echo "Applying deployment.yaml..."
+            kubectl apply -f deployment.yaml
+            
+            kubectl get svc -n macarious
+            
