@@ -21,9 +21,11 @@ def call(String credentialsId, String clusterName, String reginCode) {
 
             echo "Applying ingress.yaml..."
             kubectl apply -f ingress.yaml
-            
+
             echo "Applying deployment.yaml..."
             kubectl apply -f deployment.yaml
             
             kubectl get svc -n macarious
-            
+            """
+    }
+}
