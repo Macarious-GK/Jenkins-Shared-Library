@@ -53,10 +53,11 @@ def call(Map config = [:]) {
     def scanResult = sh(script: "trivy image --severity HIGH,CRITICAL ${config.imageName} | tee", returnStatus: true)
 
     // If any HIGH severity vulnerabilities are found, fail the pipeline
-    if (scanResult.contains("HIGH")) {
+    if (scanResult.contains("HIGH: 0")) {
+        echo "No HIGH severity vulnerabilities found by Trivy."
+        
+    } else {
         echo "Trivy found HIGH severity vulnerabilities in the Docker image."
         error "Failing the pipeline due to HIGH severity vulnerabilities."
-    } else {
-        echo "No HIGH severity vulnerabilities found by Trivy."
     }
 }
