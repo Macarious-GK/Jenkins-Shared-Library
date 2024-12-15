@@ -50,7 +50,7 @@ def call(Map config = [:]) {
     echo "Running Trivy scan for image: ${config.imageName}"
 
     // Run Trivy scan and capture the output
-    def scanOutput = sh(script: "trivy image --severity HIGH,CRITICAL ${config.imageName} --format json", returnStdout: true).trim()
+    def scanOutput = sh(script: "trivy image --severity HIGH,CRITICAL ${config.imageName} --scanners vuln --format json", returnStdout: true).trim()
 
     // Check if there are any HIGH severity vulnerabilities
     def hasHighSeverity = scanOutput.contains("\"Severity\": \"HIGH\"")
