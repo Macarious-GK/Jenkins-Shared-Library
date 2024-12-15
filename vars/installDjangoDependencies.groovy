@@ -4,7 +4,7 @@ def call(){
         python3 -m venv venv
 
         # Activate virtual environment using bash
-        bash -c "source venv/bin/activate && ls -alt && deactivate"
+        bash -c "source venv/bin/activate && ls -alt && cd .. && ls -alt && cd .. && ls -alt && deactivate"
         result=$?
 
         if [ $result -eq 0 ]; then
