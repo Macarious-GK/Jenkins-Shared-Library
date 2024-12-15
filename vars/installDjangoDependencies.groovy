@@ -1,17 +1,25 @@
-def call(){
+def call() {
     sh '''
-        echo "Setting up virtual environment and installing dependencies..."
-        python3 -m venv venv
+        echo "Checking if virtual environment exists..."
 
-        # Activate virtual environment using bash
-        bash -c "source venv/bin/activate && ls -alt && cd .. && ls -alt && cd .. && ls -alt && deactivate"
+        # Check if the virtual environment directory exists
+        if [ -d "venv" ]; then
+            echo "Virtual environment already exists, activating..."
+        else
+            echo "Creating virtual environment..."
+            python3 -m venv venv
+        fi
+
+        # Activate virtual environment and install dependencies
+        bash -c "source venv/bin/activate && pip install -r requirements.txt && deactivate"
+
         result=$?
 
         if [ $result -eq 0 ]; then
-            echo "installing dependencies successfully."
+            echo "Installing dependencies successfully."
         else
-            echo "installing dependencies failed."
+            echo "Installing dependencies failed."
             exit 1
         fi
-        '''
+    '''
 }
