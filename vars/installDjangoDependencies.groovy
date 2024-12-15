@@ -14,5 +14,4 @@ def call(){
             exit 1
         fi
         '''
-        '''
 }
