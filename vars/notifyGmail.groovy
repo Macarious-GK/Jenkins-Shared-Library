@@ -3,14 +3,16 @@ def call(Map config = [:]) {
     if (!config.to) {
         error "The 'to' parameter is required!"
     }
-    if (config.isSuccess == null) {
-        error "The 'isSuccess' parameter is required!"
+    if (config.isSuccess == null || !(config.isSuccess instanceof Boolean)) {
+        error "The 'isSuccess' parameter must be a boolean (true/false)!"
     }
 
     // Default email content
-    def subject = config.isSuccess ?
-            config.customSubject ?: "✅ Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}" :
-            config.customSubject ?: "❌ Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}"
+    def subject = config.customSubject ?: (
+        config.isSuccess 
+        ? "✅ Build Successful: ${env.JOB_NAME ?: 'Unknown Job'} #${env.BUILD_NUMBER ?: 'N/A'}"
+        : "❌ Build Failed: ${env.JOB_NAME ?: 'Unknown Job'} #${env.BUILD_NUMBER ?: 'N/A'}"
+    )
 
     def color = config.isSuccess ? "green" : "red"
     def body = config.customBody ?: """
@@ -24,8 +26,9 @@ def call(Map config = [:]) {
             </head>
             <body>
                 <h1>${config.isSuccess ? '✅ Build Successful!' : '❌ Build Failed!'}</h1>
-                <p>The build <span class="details">${env.JOB_NAME} #${env.BUILD_NUMBER}</span> ${config.isSuccess ? 'completed successfully' : 'failed'}.</p>
-                <p>Please <a href="${env.BUILD_URL}">check the logs</a> for more details.</p>
+                <p>The build <span class="details">${env.JOB_NAME ?: 'Unknown Job'} #${env.BUILD_NUMBER ?: 'N/A'}</span>
+                ${config.isSuccess ? 'completed successfully' : 'failed'}.</p>
+                <p>Please <a href="${env.BUILD_URL ?: '#'}">check the logs</a> for more details.</p>
             </body>
         </html>
     """
