@@ -23,6 +23,7 @@ def call(String credentialsId, String clusterName, String reginCode) {
             sleep 70
 
             echo "Applying Application.yaml..."
+            kubectl apply -f Secrets.yaml
             kubectl apply -f Application.yaml
 
             echo "Waiting for resources to be created..."
