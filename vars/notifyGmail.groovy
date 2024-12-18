@@ -31,7 +31,7 @@ def call(Map config = [:]) {
                 </style>
             </head>
             <body>
-                <div class="content">
+                <div class="content">   
                     <h1>${config.isSuccess ? '✅ Build Successful!' : '❌ Build Failed!'}</h1>
                     <p>The build <span class="details">${env.JOB_NAME ?: 'Unknown Job'} #${env.BUILD_NUMBER ?: 'N/A'}</span> ${config.isSuccess ? 'completed successfully 🎉' : 'failed 🚨'}.</p>
                     
@@ -59,3 +59,4 @@ def call(Map config = [:]) {
          body: body,
          mimeType: 'text/html'
 }
+    
