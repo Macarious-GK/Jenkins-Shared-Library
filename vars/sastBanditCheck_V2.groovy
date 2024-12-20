@@ -6,13 +6,13 @@ def call() {
         # Echo the Bandit report for visibility in Jenkins log
         echo "Bandit security report:"
         cat bandit_Report.json
+        ecgi "Bandit security report ends here."
 
-        # Check if Bandit found any issues
-        // if grep '"issue_severity":' bandit_Report.json > /dev/null; then
-        //     echo "Failed from SAST stage: Security issues detected by Bandit."
-
-        // else
-        //     echo "SAST stage passed successfully: No issues found by Bandit."
-        // fi
+        # Check if Bandit found any issues, but don't fail the pipeline
+        if grep '"issue_severity":' bandit_Report.json > /dev/null; then
+            echo "Security issues detected by Bandit. Please review the report."
+        else
+            echo "SAST stage passed successfully: No issues found by Bandit."
+        fi
     '''
 }
