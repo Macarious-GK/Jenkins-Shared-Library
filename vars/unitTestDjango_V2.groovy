@@ -1,6 +1,7 @@
 def call(){
     sh '''
         echo "Starting unit tests..."
+        python3 -m venv venv
 
         # Activate virtual environment using bash
         bash -c "source venv/bin/activate &&  python3 manage.py test && deactivate"
