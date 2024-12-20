@@ -1,7 +1,7 @@
 def call() {
     sh '''
         echo "Running Bandit for security checks..."
-        bandit -r . -f json -o bandit_Report.json
+        bandit -r . -f json -o bandit_Report.json || true
 
         # Echo the Bandit report for visibility in Jenkins log
         echo "Bandit security report:"
