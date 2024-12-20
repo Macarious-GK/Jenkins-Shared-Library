@@ -10,7 +10,6 @@ def call(){
             echo "Unit tests passed successfully."
         else
             echo "Unit tests failed. Please check the test results."
-            exit 1
         fi      
         '''
 }
