@@ -60,7 +60,6 @@
 //          mimeType: 'text/html'
 // }
     
-
 def call(Map config = [:]) {
     // Validate required parameters
     if (!config.to) {
@@ -78,19 +77,6 @@ def call(Map config = [:]) {
     )
 
     def color = config.isSuccess ? "green" : "red"
-    
-    // Capture the failed stage if the build failed
-    def failedStage = ''
-    if (!config.isSuccess) {
-        // If the build failed, try to find the name of the failed stage
-        def failedStageName = currentBuild.rawBuild.getAction(hudson.model.Result).getResult()
-        if (failedStageName != null) {
-            failedStage = "The failure occurred in the stage: ${currentBuild.getPreviousBuild().getAction(hudson.model.Result)}"
-        } else {
-            failedStage = 'No specific stage found for failure.'
-        }
-    }
-    
     def body = config.customBody ?: """
         <html>
             <head>
@@ -116,7 +102,7 @@ def call(Map config = [:]) {
                         <li><strong>Job Name:</strong> ${env.JOB_NAME ?: 'N/A'}</li>
                         <li><strong>Build Number:</strong> ${env.BUILD_NUMBER ?: 'N/A'}</li>
                         <li><strong>Status:</strong> <span class="details">${config.isSuccess ? 'Success' : 'Failure'}</span></li>
-                        ${config.isSuccess ? '' : "<li><strong>Failed Stage:</strong> <span class='details'>${failedStage}</span></li>"}
+                        ${config.failedStage ? "<li><strong>Failed Stage:</strong> <span class='details'>${config.failedStage}</span></li>" : ''}
                     </ul>
                     
                     <p>For further details, please visit the build logs:</p>
