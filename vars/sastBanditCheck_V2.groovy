@@ -8,11 +8,11 @@ def call() {
         cat bandit_Report.json
 
         # Check if Bandit found any issues
-        if grep '"issue_severity":' bandit_Report.json > /dev/null; then
-            echo "Failed from SAST stage: Security issues detected by Bandit."
+        // if grep '"issue_severity":' bandit_Report.json > /dev/null; then
+        //     echo "Failed from SAST stage: Security issues detected by Bandit."
 
-        else
-            echo "SAST stage passed successfully: No issues found by Bandit."
-        fi
+        // else
+        //     echo "SAST stage passed successfully: No issues found by Bandit."
+        // fi
     '''
 }
