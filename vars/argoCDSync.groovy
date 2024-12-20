@@ -1,6 +1,10 @@
-def call(String url, String username, String password, String appName) {
-    sh """
-        argocd login ${url} --username ${username} --password ${password} --insecure
-        argocd app sync ${appName} --wait
-    """
+def call(String server, String usernameCredId, String passwordCredId, String appName) {
+    withCredentials([
+        usernamePassword(credentialsId: usernameCredId, usernameVariable: 'ARGOCD_USERNAME', passwordVariable: 'ARGOCD_PASSWORD')
+    ]) {
+        sh """
+            argocd login ${server} --username ${ARGOCD_USERNAME} --password ${ARGOCD_PASSWORD} --insecure
+            argocd app sync ${appName}
+        """
+    }
 }
