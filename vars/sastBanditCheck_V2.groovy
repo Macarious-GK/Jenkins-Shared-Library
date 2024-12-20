@@ -6,7 +6,7 @@ def call() {
         # Echo the Bandit report for visibility in Jenkins log
         echo "Bandit security report:"
         cat bandit_Report.json
-        ecgi "Bandit security report ends here."
+        echo "Bandit security report ends here."
 
         # Check if Bandit found any issues, but don't fail the pipeline
         if grep '"issue_severity":' bandit_Report.json > /dev/null; then
